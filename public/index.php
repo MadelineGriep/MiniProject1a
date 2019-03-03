@@ -8,15 +8,21 @@ class main
     static public function start($filename){
 
         $records = csv::getRecords($filename);
-
-        foreach ($records as $record) {
-            $record->createRow();
-
-        }
+        $table = html::generateTable($records);
     }
 
 }
 
+class html {
+
+    public static function generateTable($records) {
+
+        foreach ($records as $record) {
+            $array = $record->returnArray();
+            print_r($array);
+        }
+    }
+}
 class csv
 {
 
@@ -61,8 +67,9 @@ class record {
         }
     }
 
-    public function createRow() {
-        print_r($this);
+    public function returnArray() {
+        $array = (array) $this;
+        return $array;
 
     }
 
