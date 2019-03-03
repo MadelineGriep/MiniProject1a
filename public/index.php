@@ -1,29 +1,65 @@
 <?php
 
-main::start();
+main::start("example.csv");
 
 class main
 {
 
-    static public function start(){
+    static public function start($filename){
 
-        $file = fopen("example.csv", "r");
+        $records = csv::getRecords($filename);
 
-        while(! feof($file))
-
-        {
-            $record = fgetcsv($file);
-            
-            $records[] = $record;
-        }
-
-        fclose($file);
+        $record = recordFactory::create();
 
         print_r($records);
     }
 
 }
-?>
+
+class csv
+{
+
+    static public function getRecords($filename) {
+
+
+        $file = fopen($filename, "r");
+
+        while(! feof($file))
+
+        {
+            $record = fgetcsv($file);
+
+            $records[] = $record;
+        }
+
+        fclose($file);
+
+        return $records;
+
+    }
+}
+
+class record {
+
+
+}
+
+class recordFactory {
+
+    public static function create(Array $array = null) {
+
+        $record = new record();
+
+        return $record;
+
+    }
+}
+
+
+
+
+
+
 
 
 
