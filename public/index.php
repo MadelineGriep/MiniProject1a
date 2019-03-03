@@ -17,16 +17,30 @@ class html {
 
     public static function generateTable($records) {
 
-        foreach ($records as $record) {
-            $array = $record->returnArray();
-            $keys = array_keys($array);
+        $count = 0;
 
-            print_r($keys);
+        foreach ($records as $record) {
+
+            if($count == 0) {
+
+                $array = $record->returnArray();
+                $fields = array_keys($array);
+                $values = array_values($array);
+                print_r($fields);
+                print_r($values);
+
+            } else {
+
+                $array = $record->returnArray();
+                $values = array_values($array);
+                print_r($values);
+
+            }
+            $count++;
         }
     }
 }
-class csv
-{
+class csv {
 
     static public function getRecords($filename) {
 
