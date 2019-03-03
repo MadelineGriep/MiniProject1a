@@ -8,6 +8,11 @@ class main
     static public function start($filename){
 
         $records = csv::getRecords($filename);
+
+        foreach ($records as $record) {
+            $record->createRow();
+
+        }
     }
 
 }
@@ -54,8 +59,11 @@ class record {
 
             $this->createProperty($property, $value);
         }
+    }
 
+    public function createRow() {
         print_r($this);
+
     }
 
     public function createProperty($name = 'first', $value = 'Maddy'){
