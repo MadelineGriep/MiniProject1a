@@ -8,8 +8,6 @@ class main
     static public function start($filename){
 
         $records = csv::getRecords($filename);
-
-        print_r($records);
     }
 
 }
@@ -27,7 +25,7 @@ class csv
         {
             $record = fgetcsv($file);
 
-            $records[] = recordFactory::create();
+            $records[] = recordFactory::create($record);
         }
 
         fclose($file);
@@ -39,6 +37,19 @@ class csv
 
 class record {
 
+    public function __construct(array $record = null)
+    {
+
+        $this->createProperty();
+
+        print_r($this);
+    }
+
+    public function createProperty($name = 'first', $value = 'Maddy'){
+
+        $this->{$name} = $value;
+
+    }
 
 }
 
@@ -46,7 +57,7 @@ class recordFactory {
 
     public static function create(Array $array = null) {
 
-        $record = new record();
+        $record = new record($array);
 
         return $record;
 
