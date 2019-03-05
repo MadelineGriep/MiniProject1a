@@ -1,124 +1,123 @@
 <?php
 
-main::start("example.csv");
-
+main:: start("example.csv");
 class main
 {
-
-    static public function start($filename){
-
+    static public function start($filename)
+    {
         $records = csv::getRecords($filename);
-        $table = html::generateTable($records);
-    }
-
-}
-
-class html {
-
-    public static function generateTable($records) {
-
-        $count = 0;
-
-        foreach ($records as $record) {
-
-            if($count == 0) {
-
-                $array = $record->returnArray();
-                $fields = array_keys($array);
-                $values = array_values($array);
-                print_r($fields);
-                print_r($values);
-
-            } else {
-
-                $array = $record->returnArray();
-                $values = array_values($array);
-                print_r($values);
-
-            }
-            $count++;
-        }
+        $table = html::createTable($records);
+        system:: Printpage($table);
     }
 }
-class csv {
+class csv
+{
 
-    static public function getRecords($filename) {
 
-
+    static public function getRecords($filename)
+    {
         $file = fopen($filename, "r");
-
-        $fieldNames = array();
-
+        $fields = array();
         $count = 0;
 
-        while(! feof($file))
-
-        {
+        while (!feof($file)) {
             $record = fgetcsv($file);
-            if($count == 0){
-                $fieldNames = $record;
+            if ($count == 0) {
+                $fields = $record;
             } else {
-                $records[] = recordFactory::create($fieldNames, $record);
+                $records[] = RecordFactory::create($fields, $record);
             }
             $count++;
         }
-
         fclose($file);
-
         return $records;
-
     }
 }
 
-class record {
-
-    public function __construct(array $fieldNames = null, $values = null)
+class record
+{
+    public function __construct(Array $fields = null, Array $values = null)
     {
 
-        $record = array_combine($fieldNames, $values);
+        $record = array_combine($fields, $values);
 
         foreach ($record as $property => $value) {
-
             $this->createProperty($property, $value);
         }
     }
 
-    public function returnArray() {
-        $array = (array) $this;
-        return $array;
-
-    }
-
-    public function createProperty($name = 'first', $value = 'Maddy'){
-
-        $this->{$name} = $value;
-
+    public function createProperty($property,$value)
+    {
+        $this->{$property} = $value;
+        $property = '<th>' .$property.'</th>';
+        $value = '<td>' .$value.'</td>';
     }
 
 }
 
-class recordFactory {
-
-    public static function create(Array $fieldNames = null, $values = null) {
-
-        $record = new record($fieldNames, $values);
+class recordFactory{
+    public static function create(Array $fields = null,Array $values = null)
+    {
+        $record = new record($fields,$values);
 
         return $record;
+    }
+
+}
+
+class html
+{
+
+    public static function createTable($array)
+    {
+
+
+        echo "
+           <html lang=\"en\">
+           <head>
+           <meta charset=\"utf-8\">
+           <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+           <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">
+           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
+           <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>
+           </head>
+           </html>";
+
+        //table row
+        $html = '<table class="table table-striped">';
+        // header row
+        $html .= '<tr>';
+        foreach($array[0] as $key=>$value){
+            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+        }
+        $html .= '</tr>';
+
+        // data rows
+        foreach( $array as $key=>$value){
+            $html .= '<tr>';
+            foreach($value as $key2=>$value2){
+                $html .= '<td>' . htmlspecialchars($value2) . '</td>';
+            }
+            $html .= '</tr>';
+        }
+
+        // finish table and return it
+
+        $html .= '</table>';
+        return $html;
+
+
 
     }
+
 }
 
 
+class system{
+    static public function Printpage($page)
+    {
+        echo $page;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+}
 
